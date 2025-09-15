@@ -1,6 +1,8 @@
 *.zip
 *.csv
+# images
 *.png
 *.jpeg
 *.gif
+*.jpg
 
