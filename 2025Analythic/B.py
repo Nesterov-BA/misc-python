@@ -23,12 +23,6 @@ def count_leaves(numLeavesSt, childLeft, childRight):
 def count_children(numLeavesSt, marks, childLeft, childRight):
     childrenNum = np.zeros(2 * numLeavesSt - 1, dtype=int)
     for i in range(numLeavesSt, 2 * numLeavesSt - 1):
-        print(
-            i + 1,
-            childLeft[i - numLeavesSt],
-            childRight[i - numLeavesSt],
-        )
-
         childrenNum[i] = (
             childrenNum[childLeft[i - numLeavesSt] - 1]
             + childrenNum[childRight[i - numLeavesSt] - 1]
