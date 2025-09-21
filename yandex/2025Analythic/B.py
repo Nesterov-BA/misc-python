@@ -20,7 +20,7 @@ def count_leaves(numLeavesSt, childLeft, childRight):
     return leavesNum
 
 
-def count_children(numLeavesSt, marks, childLeft, childRight):
+def count_children(numLeavesSt, childLeft, childRight):
     childrenNum = np.zeros(2 * numLeavesSt - 1, dtype=int)
     for i in range(numLeavesSt, 2 * numLeavesSt - 1):
         childrenNum[i] = (
@@ -45,6 +45,13 @@ def count_ones(numLeavesSt, marks, childLeft, childRight):
     return leavesNum
 
 
+def prune_count_leaves(childLeft, childRight, numLeavesSt):
+    leaves = count_leaves(numLeavesSt, childLeft, childRight)
+    for index in range(2 * numLeavesSt - 1):
+        leaves[index] = leaves[2 * numLeavesSt - 2] - leaves[index] + 1
+    return leaves
+
+
 def entropies(numLeavesSt, marks, childLeft, childRight):
     onesNum = count_ones(numLeavesSt, marks, childLeft, childRight)
     leavesNum = count_leaves(numLeavesSt, childLeft, childRight)
@@ -55,7 +62,7 @@ def entropies(numLeavesSt, marks, childLeft, childRight):
     return entropies
 
 
-with open("input.txt", "r") as file:
+with open("inputB.txt", "r") as file:
     lines = file.readlines()
 
 numLeavesSt, numLeavesEnd = list(map(int, lines[0].split()))
@@ -65,3 +72,4 @@ childRight = np.zeros(numLeavesSt - 1, dtype=int)
 for i in range(numLeavesSt - 1):
     childLeft[i], childRight[i] = list(map(int, lines[i + 2].split()))
 entropies(numLeavesSt, marks, childLeft, childRight)
+print(prune_count_leaves(childLeft, childRight, numLeavesSt))
