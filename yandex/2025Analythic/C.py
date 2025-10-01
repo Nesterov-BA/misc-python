@@ -42,18 +42,38 @@ def find_line_angle_range(points, num1Class, num2Class):
         class1ArcLength = points[end][1] - points[start][1]
     else:
         class1ArcLength = 2 * np.pi - (points[start][1] - points[end][1])
-    print(label, class1ArcLength)
+    print(f"Class {label}, length {class1ArcLength}")
     end2 = (start - 1) % size
     start2 = (end + 1) % size
-    print(start, end, start2, end2)
+    print(
+        f"1st arc:({points[start][1] * 180 / np.pi},{points[end][1] * 180 / np.pi}), 2st arc:({points[start2][1] * 180 / np.pi},{points[end2][1] * 180 / np.pi})"
+    )
 
     if end2 > start2:
         class2ArcLength = points[end2][1] - points[start2][1]
     else:
         class2ArcLength = 2 * np.pi - (points[start2][1] - points[end2][1])
-    print(1 - label, class2ArcLength)
+    print(f"Class {1 - label}, length {class2ArcLength}")
     if class1ArcLength > np.pi or class2ArcLength > np.pi:
         return -1
+    return points[start][1], points[end][1], points[start2][1], points[end2][1]
+
+
+def line_limits(s1, e1, s2, e2):
+    print(s1, e1, s2, e2)
+    e1 -= s1
+    s2 -= s1
+    e2 -= s1
+    if s2 < 0:
+        s2 += 2 * np.pi
+    if e1 < 0:
+        e1 += 2 * np.pi
+    if e2 < 0:
+        e2 += 2 * np.pi
+    print(0, e1, s2, e2)
+    start = max(e2 - np.pi, e1)
+    end = s2
+    return start + s1, end + s1
 
 
 with open("inputC.txt", "r") as file:
@@ -73,12 +93,21 @@ for i in range(num2Class):
     points.append([class2[i][0], class2[i][1], 1])
 linePoint = np.array(list(map(float, lines[num2Class + num1Class + 2].split())))
 points = np.array(points)
+print("Points in cartesian coordinates:")
+print(points)
 for i in range(num1Class + num2Class):
     points[i][0] -= linePoint[0]
     points[i][1] -= linePoint[1]
 points = arrayCar2pol(points, num1Class + num2Class)
+print("Points in polar coordinates:")
 print(points)
 print(find_line_angle_range(points, num1Class, num2Class))
+s1 = 0
+s2 = 0
+e1 = 0
+e2 = 0
+if find_line_angle_range(points, num1Class, num2Class) != -1:
+    s1, e1, s2, e2 = find_line_angle_range(points, num1Class, num2Class)
 print("First class points:")
 for i in range(num1Class):
     print(class1[i])
@@ -86,3 +115,4 @@ for i in range(num1Class):
 print("Second class points:")
 for i in range(num2Class):
     print(class2[i])
+print(line_limits(s1, e1, s2, e2))
