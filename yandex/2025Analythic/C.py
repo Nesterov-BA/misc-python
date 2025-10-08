@@ -70,9 +70,9 @@ def line_limits(s1, e1, s2, e2):
         e1 += 2 * np.pi
     if e2 < 0:
         e2 += 2 * np.pi
-    print(0, e1, s2, e2)
+    print(0, e1 * 180 / np.pi, s2 * 180 / np.pi, e2 * 180 / np.pi)
     start = max(e2 - np.pi, e1)
-    end = s2
+    end = min(s2, np.pi)
     return start + s1, end + s1
 
 
